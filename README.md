@@ -1,6 +1,6 @@
 # Lossless String Compression - DSA Project 
 
-> **Course**: Data Structures & Algorithms
+> **Course**: Data Structures & Algorithms  
 > **Institution**: VNUHCM - University of Science (HCMUS)  
 > **Topic**: Group 6 - Lossless String Compression (`RLE`, `Huffman`, `LZW`, and `Deflate`)
 
