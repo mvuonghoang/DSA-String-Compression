@@ -1,6 +1,6 @@
 # Lossless String Compression - DSA Project 
 
-> **Course**: Data Structures & Algorithms (CSC10004 - Summer 2026)  
+> **Course**: Data Structures & Algorithms
 > **Institution**: VNUHCM - University of Science (HCMUS)  
 > **Topic**: Group 6 - Lossless String Compression (`RLE`, `Huffman`, `LZW`, and `Deflate`)
 
@@ -70,15 +70,3 @@ compressor -a [algorithm] -m [mode] -i [input_file] -o [output_file]
 │   └── sample.txt
 └── docs/                # Report drafting, LaTeX / markdown notes
 ```
-
----
-
-## 🌿 Git Branching Workflow
-
-To collaborate smoothly, each member works on their feature branch before creating a Pull Request (PR) to merge into `main`:
-
-1. `main`: Stable code that compiles and passes all checks.
-2. `feat/huffman`: Huffman implementation and BitStream utilities.
-3. `feat/rle`: RLE algorithm & benchmark test generation.
-4. `feat/lzw`: LZW dictionary-based compression.
-5. `feat/deflate`: LZ77 + Huffman integration.
