@@ -34,4 +34,9 @@ Thumbs.db
 # Temporary / Large generated test outputs
 *.compressed
 *.decompressed
+*.huff
+*.rle
+*.lzw
+*.deflate
+*_decompressed.txt
 tests/outputs/
