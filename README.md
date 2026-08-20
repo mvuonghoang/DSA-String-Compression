@@ -1,28 +1,85 @@
-DATA STRUCTURE & ALGORITHM PROJECT: STRING COMPRESSION - Group 6
+@@ -0,0 +1,84 @@
+# Lossless String Compression - DSA Project (CSC10004)
 
-Project structure
+> **Course**: Data Structures & Algorithms (CSC10004 - Summer 2026)  
+> **Institution**: VNUHCM - University of Science (HCMUS)  
+> **Topic**: Group Project - Lossless String Compression (`RLE`, `Huffman`, `LZW`, and `Deflate`)
 
-source file: contains all of source code files
-test file: contains all of test files
-readme.txt: contains some guides about this project
+---
 
-2. Compilation
+## 👥 Group Members & Task Allocation
 
--This program is written in standard C++ requires a compiler supporting the C++17 standard
+| Member | Student ID | Algorithm Focus | Responsibilities |
+| :--- | :--- | :--- | :--- |
+| **Member 1** | *(Your ID)* | **Huffman Coding** | CLI Framework, Timer & Metrics, BitStream I/O, Huffman Tree, Report Lead |
+| **Member 2** | *(Your ID)* | **Run-Length Encoding (RLE)** | RLE Implementation, Test Data Generator, Benchmark Experiments, Report Results |
+| **Member 3** | *(Your ID)* | **Lempel-Ziv-Welch (LZW)** | LZW Dynamic Dictionary, Bit-packing, Video Demo, Readme Guide |
+| **Team (Bonus)** | *All* | **Deflate (+1 pt)** | Combination of LZ77 sliding window + Huffman coding |
 
--To compile and run the source code, please open cmd (command) in your computer
+---
 
-3. Command line usage
+## 🛠️ Build & Compilation
 
--a [algorithm] : Select algorithm to use -> rle, huff, or lzw
--m [mode]      : Select mode -> c (compress) or d (decompress)
--i [inputfile]: Path to the source input file
--o [outputfile]: Path to the resulting output file
+The project strictly adheres to **C++17** using standard libraries only.
 
-Examples:
+```bash
+# Compile all source files into the compressor executable
+g++ source/*.cpp -o compressor -std=c++17 -O3
+```
 
-+To compress a text file using LZW:
-compressor.exe -a lzw -m c -i tests/input.txt -o tests/compressed.lzw
+---
 
-+To decompress the file back to the test
-compressor.exe -a lzw -m d -i tests/compressed.lzw -o tests/output.txt
+## 🚀 CLI Usage
+
+```bash
+compressor -a [algorithm] -m [mode] -i [input_file] -o [output_file]
+```
+
+### Options:
+* `-a [algorithm]`:
+  * `rle` - Run-Length Encoding
+  * `huff` - Huffman Coding
+  * `lzw` - Lempel-Ziv-Welch
+  * `deflate` - Deflate (LZ77 + Huffman) *(Bonus)*
+* `-m [mode]`:
+  * `c` - Compression mode
+  * `d` - Decompression mode
+* `-i [input_file]`: Path to the input file
+* `-o [output_file]`: Path to the output file
+
+### Example:
+```bash
+# Compress using RLE
+./compressor -a rle -m c -i tests/sample.txt -o tests/sample.rle
+
+# Decompress using RLE
+./compressor -a rle -m d -i tests/sample.rle -o tests/sample_decompressed.txt
+```
+
+---
+
+## 📂 Project Structure
+
+```text
+├── .gitignore
+├── README.md
+├── source/              # C++ source and header files
+│   ├── main.cpp         # Entry point & CLI parsing
+│   ├── common/          # Common utilities (Timer, BitStream, Metrics)
+│   └── algorithms/      # RLE, Huffman, LZW, Deflate implementations
+├── tests/               # Test datasets and test runners
+│   └── sample.txt
+└── docs/                # Report drafting, LaTeX / markdown notes
+```
+
+---
+
+## 🌿 Git Branching Workflow
+
+To collaborate smoothly, each member works on their feature branch before creating a Pull Request (PR) to merge into `main`:
+
+1. `main`: Stable code that compiles and passes all checks.
+2. `feat/huffman`: Huffman implementation and BitStream utilities.
+3. `feat/rle`: RLE algorithm & benchmark test generation.
+4. `feat/lzw`: LZW dictionary-based compression.
+5. `feat/deflate`: LZ77 + Huffman integration.
