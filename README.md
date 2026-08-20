@@ -1,4 +1,4 @@
-@@ -0,0 +1,84 @@
+
 # Lossless String Compression - DSA Project (CSC10004)
 
 > **Course**: Data Structures & Algorithms (CSC10004 - Summer 2026)  
@@ -11,9 +11,9 @@
 
 | Member | Student ID | Algorithm Focus | Responsibilities |
 | :--- | :--- | :--- | :--- |
-| **Member 1** | *(Your ID)* | **Huffman Coding** | CLI Framework, Timer & Metrics, BitStream I/O, Huffman Tree, Report Lead |
-| **Member 2** | *(Your ID)* | **Run-Length Encoding (RLE)** | RLE Implementation, Test Data Generator, Benchmark Experiments, Report Results |
-| **Member 3** | *(Your ID)* | **Lempel-Ziv-Welch (LZW)** | LZW Dynamic Dictionary, Bit-packing, Video Demo, Readme Guide |
+| **Member 1** | *25127258* | **Huffman Coding** | CLI Framework, Timer & Metrics, BitStream I/O, Huffman Tree, Report Lead |
+| **Member 2** | *24127587* | **Run-Length Encoding (RLE)** | RLE Implementation, Test Data Generator, Benchmark Experiments, Report Results |
+| **Member 3** | *25127146* | **Lempel-Ziv-Welch (LZW)** | LZW Dynamic Dictionary, Bit-packing, Video Demo, Readme Guide |
 | **Team (Bonus)** | *All* | **Deflate (+1 pt)** | Combination of LZ77 sliding window + Huffman coding |
 
 ---
