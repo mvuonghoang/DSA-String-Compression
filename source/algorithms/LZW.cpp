@@ -4,7 +4,7 @@ string readfile(const string filename)
 	string bodem = "";
 	if (!fin.is_open()) 
 	{
-		cout << "Khong the mo file: " << filename << "\n";
+		cout << "Cannot open this file: " << filename << "\n";
 		return "";
 	}
 	stringstream buffer;
@@ -17,7 +17,7 @@ bool writefile(const string filename, const string code)
 	ofstream fout(filename, ios::binary);
 	if (!fout.is_open())
 	{
-		cout << "Khong the mo file" << "\n";
+		cout << "Cannot open this file: " << "\n";
 		return false;
 	}
 	fout << code;
