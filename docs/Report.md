@@ -2,10 +2,11 @@
 **Course**: Data Structures & Algorithms (CSC10004 - Summer 2026)  
 **Department**: Department of Knowledge Engineering, Faculty of Information Technology  
 **Institution**: VNUHCM - University of Science (HCMUS)  
+**Group**: **Group 6 (Class 25CA)**  
 
 ---
 
-## 3.1 Group Information
+## 3.1 Group Information (Group 6)
 
 | Student Name | Student ID | Assigned Tasks | % Completed |
 | :--- | :---: | :--- | :---: |
