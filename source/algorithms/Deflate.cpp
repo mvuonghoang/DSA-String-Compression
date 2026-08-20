@@ -223,13 +223,74 @@ std::vector<LZ77Token> Deflate::decodeTokensWithHuffman(std::istream& in, uint64
 // =============================================================================
 
 std::vector<LZ77Token> Deflate::lz77Compress(const std::vector<uint8_t>& input) {
-    // Member 2 will enhance this with sliding window longest-match search
-    // Current baseline converts bytes into literal tokens
     std::vector<LZ77Token> tokens;
-    tokens.reserve(input.size());
-    for (uint8_t byte : input) {
-        tokens.push_back(LZ77Token::createLiteral(byte));
+    const size_t inputSize = input.size();
+    if (inputSize == 0) return tokens;
+
+    tokens.reserve(inputSize);
+
+    const int WINDOW_SIZE = 4096;      // 4KB sliding window
+    const uint16_t MAX_MATCH = 258;    // Maximum match length
+    const uint16_t MIN_MATCH = 3;      // Minimum match length
+
+    // 3-byte rolling hash table for O(1) match candidate lookup
+    const size_t HASH_SIZE = 4096;
+    std::vector<int> head(HASH_SIZE, -1);
+    std::vector<int> prev(inputSize, -1);
+
+    auto getHash = [](uint8_t b0, uint8_t b1, uint8_t b2) -> uint16_t {
+        return static_cast<uint16_t>(((b0 << 10) ^ (b1 << 5) ^ b2) & 4095);
+    };
+
+    for (size_t i = 0; i < inputSize; ++i) {
+        uint16_t bestLen = 0;
+        uint16_t bestDist = 0;
+
+        if (i + MIN_MATCH <= inputSize) {
+            uint16_t hash = getHash(input[i], input[i + 1], input[i + 2]);
+            int matchPos = head[hash];
+            int chainLen = 0;
+            const int MAX_CHAIN = 64; // Limit chain depth to preserve linear O(N) execution speed
+
+            while (matchPos != -1 && (i - matchPos) <= static_cast<size_t>(WINDOW_SIZE) && chainLen < MAX_CHAIN) {
+                size_t len = 0;
+                while (len < MAX_MATCH && (i + len) < inputSize && input[matchPos + len] == input[i + len]) {
+                    len++;
+                }
+
+                if (len > bestLen) {
+                    bestLen = static_cast<uint16_t>(len);
+                    bestDist = static_cast<uint16_t>(i - matchPos);
+                    if (bestLen >= MAX_MATCH) break;
+                }
+
+                matchPos = prev[matchPos];
+                chainLen++;
+            }
+
+            // Insert current position into hash chain
+            prev[i] = head[hash];
+            head[hash] = static_cast<int>(i);
+        }
+
+        if (bestLen >= MIN_MATCH) {
+            tokens.push_back(LZ77Token::createMatch(bestLen, bestDist));
+
+            // Insert intermediate positions into hash table for future matches
+            for (size_t k = 1; k < bestLen; ++k) {
+                size_t nextPos = i + k;
+                if (nextPos + MIN_MATCH <= inputSize) {
+                    uint16_t h = getHash(input[nextPos], input[nextPos + 1], input[nextPos + 2]);
+                    prev[nextPos] = head[h];
+                    head[h] = static_cast<int>(nextPos);
+                }
+            }
+            i += bestLen - 1; // Advance past the matched bytes
+        } else {
+            tokens.push_back(LZ77Token::createLiteral(input[i]));
+        }
     }
+
     return tokens;
 }
 
