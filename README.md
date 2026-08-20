@@ -1,72 +1,28 @@
-# Lossless String Compression - DSA Project 
+DATA STRUCTURE & ALGORITHM PROJECT: STRING COMPRESSION - Group 6
 
-> **Course**: Data Structures & Algorithms  
-> **Institution**: VNUHCM - University of Science (HCMUS)  
-> **Topic**: Group 6 - Lossless String Compression (`RLE`, `Huffman`, `LZW`, and `Deflate`)
+Project structure
 
----
+source file: contains all of source code files
+test file: contains all of test files
+readme.txt: contains some guides about this project
 
-## 👥 Group Members & Task Allocation
+2. Compilation
 
-| Member | Student ID | Algorithm Focus | Responsibilities |
-| :--- | :--- | :--- | :--- |
-| **Member 1** | *25127258* | **Huffman Coding** | CLI Framework, Timer & Metrics, BitStream I/O, Huffman Tree, Report Lead |
-| **Member 2** | *24127587* | **Run-Length Encoding (RLE)** | RLE Implementation, Test Data Generator, Benchmark Experiments, Report Results |
-| **Member 3** | *25127146* | **Lempel-Ziv-Welch (LZW)** | LZW Dynamic Dictionary, Bit-packing, Video Demo, Readme Guide |
-| **Team (Bonus)** | *All* | **Deflate** | Combination of LZ77 sliding window + Huffman coding |
+-This program is written in standard C++ requires a compiler supporting the C++17 standard
 
----
+-To compile and run the source code, please open cmd (command) in your computer
 
-## 🛠️ Build & Compilation
+3. Command line usage
 
-The project strictly adheres to **C++17** using standard libraries only.
+-a [algorithm] : Select algorithm to use -> rle, huff, or lzw
+-m [mode]      : Select mode -> c (compress) or d (decompress)
+-i [inputfile]: Path to the source input file
+-o [outputfile]: Path to the resulting output file
 
-```bash
-# Compile all source files into the compressor executable
-g++ source/*.cpp -o compressor -std=c++17 -O3
-```
+Examples:
 
----
++To compress a text file using LZW:
+compressor.exe -a lzw -m c -i tests/input.txt -o tests/compressed.lzw
 
-## 🚀 CLI Usage
-
-```bash
-compressor -a [algorithm] -m [mode] -i [input_file] -o [output_file]
-```
-
-### Options:
-* `-a [algorithm]`:
-  * `rle` - Run-Length Encoding
-  * `huff` - Huffman Coding
-  * `lzw` - Lempel-Ziv-Welch
-  * `deflate` - Deflate (LZ77 + Huffman) *(Bonus)*
-* `-m [mode]`:
-  * `c` - Compression mode
-  * `d` - Decompression mode
-* `-i [input_file]`: Path to the input file
-* `-o [output_file]`: Path to the output file
-
-### Example:
-```bash
-# Compress using RLE
-./compressor -a rle -m c -i tests/sample.txt -o tests/sample.rle
-
-# Decompress using RLE
-./compressor -a rle -m d -i tests/sample.rle -o tests/sample_decompressed.txt
-```
-
----
-
-## 📂 Project Structure
-
-```text
-├── .gitignore
-├── README.md
-├── source/              # C++ source and header files
-│   ├── main.cpp         # Entry point & CLI parsing
-│   ├── common/          # Common utilities (Timer, BitStream, Metrics)
-│   └── algorithms/      # RLE, Huffman, LZW, Deflate implementations
-├── tests/               # Test datasets and test runners
-│   └── sample.txt
-└── docs/                # Report drafting, LaTeX / markdown notes
-```
++To decompress the file back to the test
+compressor.exe -a lzw -m d -i tests/compressed.lzw -o tests/output.txt
