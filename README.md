@@ -11,9 +11,9 @@
 
 | Member | Student ID | Algorithm Focus | Responsibilities |
 | :--- | :--- | :--- | :--- |
-| **Member 1** | *25127258* | **Huffman Coding** | CLI Framework, Timer & Metrics, BitStream I/O, Huffman Tree, Report Lead |
-| **Member 2** | *24127587* | **Run-Length Encoding (RLE)** | RLE Implementation, Test Data Generator, Benchmark Experiments, Report Results |
-| **Member 3** | *25127146* | **Lempel-Ziv-Welch (LZW)** | LZW Dynamic Dictionary, Bit-packing, Video Demo, Readme Guide |
+| **Member&nbsp;1** | *25127258* | **Huffman Coding** | CLI Framework, Timer & Metrics, BitStream I/O, Huffman Tree, Report Lead |
+| **Member&nbsp;2** | *24127587* | **Run-Length Encoding (RLE)** | RLE Implementation, Test Data Generator, Benchmark Experiments, Report Results |
+| **Member&nbsp;3** | *25127146* | **Lempel-Ziv-Welch (LZW)** | LZW Dynamic Dictionary, Bit-packing, Video Demo, Readme Guide |
 | **Team** | *All* | **Deflate** | Combination of LZ77 sliding window + Huffman coding |
 
 ---
