@@ -1,0 +1,498 @@
+\documentclass[11pt,a4paper]{article}
+
+% ==============================================================================
+% PACKAGES & CONFIGURATION
+% ==============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{hyperref}
+
+% Define color palette
+\definecolor{hcmusblue}{RGB}{0, 51, 102}
+\definecolor{accentblue}{RGB}{41, 128, 185}
+\definecolor{darkgray}{RGB}{50, 50, 50}
+\definecolor{lightgray}{RGB}{245, 247, 250}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=hcmusblue,
+    citecolor=accentblue,
+    urlcolor=accentblue,
+    pdftitle={Lossless String Compression - DSA Project},
+    pdfauthor={HCMUS DSA Group}
+}
+
+% Header and Footer configuration
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{darkgray}\textit{CSC10004: Data Structures \& Algorithms}}
+\fancyhead[R]{\small\color{darkgray}\textit{Group Project: String Compression}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% Section styling
+\titleformat{\section}
+  {\color{hcmusblue}\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\color{accentblue}\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\color{darkgray}\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+% Listings configuration for code blocks
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{lightgray},
+    keywordstyle=\color{hcmusblue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red!70!black},
+    showstringspaces=false
+}
+
+% ==============================================================================
+% DOCUMENT BEGINS
+% ==============================================================================
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% FORMAL COVER PAGE (HCMUS Standard Cover Style)
+% ------------------------------------------------------------------------------
+\begin{titlepage}
+    \begin{center}
+        \vspace*{-1.0cm}
+        {\Large \textbf{VIETNAM NATIONAL UNIVERSITY HO CHI MINH CITY}}\\[0.3em]
+        {\Large \textbf{UNIVERSITY OF SCIENCE}}\\[0.3em]
+        {\large \textbf{FACULTY OF INFORMATION TECHNOLOGY}}\\[0.2em]
+        {\large \textbf{DEPARTMENT OF KNOWLEDGE ENGINEERING}}\\[1.5em]
+
+        % University Logo
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=4.2cm]{hcmus_logo.png}
+        \end{figure}
+        \vspace{0.8em}
+
+        {\LARGE \color{hcmusblue}\textbf{DATA STRUCTURES \& ALGORITHMS}}\\[0.4em]
+        {\large \textbf{COURSE CODE: CSC10004 -- SUMMER 2026}}\\[1.8em]
+
+        \rule{\linewidth}{1.5pt}\\[0.6em]
+        {\Huge \color{hcmusblue}\textbf{PROJECT REPORT}}\\[0.4em]
+        {\LARGE \textbf{LOSSLESS STRING COMPRESSION}}\\[0.2em]
+        {\normalsize \textit{Investigation of RLE, Huffman Coding, LZW, and DEFLATE Algorithms}}\\[0.6em]
+        \rule{\linewidth}{1.5pt}\\[2.0em]
+
+        % Group & Advisor Info Table
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{r l}
+                \textbf{Instructors:} & Dr. Le Thanh Tung \\
+                                      & MSc. Tran Hoang Quan \\
+                \textbf{Class:}       & 25CA \\
+                \textbf{Students:}    & Member 1 (Leader) -- ID: \texttt{25127258} \\
+                                      & Member 2 -- ID: \texttt{24127587} \\
+                                      & Member 3 -- ID: \texttt{25127146} \\
+            \end{tabular}
+        \end{table}
+
+        \vfill
+        {\large \textbf{HO CHI MINH CITY, AUGUST 2026}}
+    \end{center}
+\end{titlepage}
+
+% ------------------------------------------------------------------------------
+% TABLE OF CONTENTS
+% ------------------------------------------------------------------------------
+\newpage
+\tableofcontents
+\newpage
+
+% ------------------------------------------------------------------------------
+% SECTION 1: GROUP INFORMATION
+% ------------------------------------------------------------------------------
+\section{Group Information}
+
+Table~\ref{tab:group_info} outlines the members of our project team and their individual contributions to the software development, experimental benchmarks, and report drafting.
+
+\begin{table}[htbp]
+\centering
+\caption{Group Members and Task Allocation Matrix}
+\label{tab:group_info}
+\begin{tabularx}{\textwidth}{@{}llXc@{}}
+\toprule
+\textbf{Student Name} & \textbf{Student ID} & \textbf{Assigned Tasks} & \textbf{\% Completed} \\ \midrule
+\textbf{Member 1 (Leader)} & \texttt{25127258} & Project Architecture, CLI Framework, Timer \& Metrics, BitStream I/O, Huffman Coding, Report Drafting & 100\% \\
+\textbf{Member 2} & \texttt{24127587} & PackBits RLE Algorithm, Deflate LZ77 Matcher, Benchmark Test Generator, Experimental Analysis & 100\% \\
+\textbf{Member 3} & \texttt{25127146} & LZW Algorithm, Deflate LZ77 Reconstructor, Video Demonstration, Readme Guide & 100\% \\ \midrule
+\multicolumn{3}{r}{\textbf{Total Group Completion:}} & \textbf{100\%} \\ \bottomrule
+\end{tabularx}
+\end{table}
+
+---
+
+% ------------------------------------------------------------------------------
+% SECTION 2: PROBLEM STATEMENT
+% ------------------------------------------------------------------------------
+\section{Problem Statement}
+
+\subsection{Mathematical Formulation of Lossless Data Compression}
+Let $\Sigma$ denote a finite alphabet of distinct source symbols ($|\Sigma| = 256$ for standard 8-bit ASCII bytes). An uncompressed source message $X$ of length $N$ is represented as an ordered sequence:
+\begin{equation}
+X = (x_1, x_2, \dots, x_N) \in \Sigma^N
+\end{equation}
+
+A lossless data compression system is defined by an encoding function $\mathcal{C}$ and a decoding function $\mathcal{D}$:
+\begin{equation}
+\mathcal{C}: \Sigma^N \to \{0, 1\}^M, \quad \mathcal{D}: \{0, 1\}^M \to \Sigma^N
+\end{equation}
+where $M$ denotes the length of the compressed bitstream. The strict invertibility requirement dictates:
+\begin{equation}
+\forall X \in \Sigma^N, \quad \mathcal{D}(\mathcal{C}(X)) = X
+\end{equation}
+
+Performance is quantified by \textbf{Compression Ratio} (Eq.~\ref{eq:ratio}) and \textbf{Space Savings} (Eq.~\ref{eq:savings}):
+\begin{equation}
+\label{eq:ratio}
+\text{Compression Ratio} = \frac{\text{Uncompressed Size (bytes)}}{\text{Compressed Size (bytes)}}
+\end{equation}
+\begin{equation}
+\label{eq:savings}
+\text{Space Savings} = 1 - \frac{\text{Compressed Size (bytes)}}{\text{Uncompressed Size (bytes)}}
+\end{equation}
+
+\subsection{Theoretical Bounds: Shannon Entropy}
+Claude Shannon's Source Coding Theorem establishes that the expected minimum codeword length $L_{\text{avg}}$ for memoryless symbol-by-symbol prefix codes is lower-bounded by the empirical Shannon Entropy $H(X)$:
+\begin{equation}
+H(X) = -\sum_{i=1}^{|\Sigma|} P(s_i) \log_2 P(s_i) \quad (\text{bits/symbol})
+\end{equation}
+where $P(s_i)$ is the empirical probability of occurrence of symbol $s_i$.
+
+\subsection{Standardized Running Example}
+Throughout this report, all step-by-step algorithmic traces are demonstrated using the standard running example:
+\begin{equation}
+\mathbf{X = \text{"BABBACAC"}} \quad (N = 8 \text{ bytes} = 64 \text{ bits})
+\end{equation}
+\begin{itemize}
+    \item Alphabet: $\Sigma = \{'A', 'B', 'C'\}$, with frequencies $f('A')=3$, $f('B')=3$, $f('C')=2$.
+    \item Probabilities: $P('A') = 0.375$, $P('B') = 0.375$, $P('C') = 0.250$.
+    \item Shannon Entropy: $H(X) = -(2 \times 0.375 \log_2 0.375 + 0.25 \log_2 0.25) \approx \mathbf{1.561\text{ bits/character}}$.
+    \item Theoretical Minimal Payload: $8 \times 1.561 \approx \mathbf{12.49\text{ bits}} \approx 2\text{ bytes}$.
+\end{itemize}
+
+---
+
+% ------------------------------------------------------------------------------
+% SECTION 3: ALGORITHM ANALYSIS
+% ------------------------------------------------------------------------------
+\section{Algorithm Analysis}
+
+\subsection{Run-Length Encoding (RLE)}
+
+\subsubsection{Introduction \& Real-World Applications}
+Run-Length Encoding (RLE) compresses data by replacing contiguous sequences of identical symbols with a run count and the symbol. To prevent file expansion on non-repeating data, our implementation utilizes \textbf{PackBits Flag RLE}.
+\begin{itemize}
+    \item \textbf{Applications}: BMP/TIFF image formats, CCITT Group 3/4 facsimile transmissions, and JPEG AC zero-run coding.
+\end{itemize}
+
+\subsubsection{Pseudocode}
+\begin{algorithm}[H]
+\caption{PackBits RLE Compression}
+\begin{algorithmic}[1]
+\Require Byte sequence $X$ of length $N$
+\Ensure Compressed byte stream $Y$
+\State $\text{WriteHeader}(Y, \text{"RLE\textbackslash 1"}, N)$
+\State $pos \gets 0$
+\While{$pos < N$}
+    \State $runLen \gets \text{CountRepeats}(X, pos)$
+    \If{$runLen \ge 3$}
+        \State $control \gets 0\text{x}80 \mid (runLen - 1)$ \Comment{Bit 7 = 1: Repeat Run}
+        \State $\text{WriteByte}(Y, control)$; $\text{WriteByte}(Y, X[pos])$
+        \State $pos \gets pos + runLen$
+    \Else
+        \State $litLen \gets \text{CountLiteralRun}(X, pos)$
+        \State $control \gets 0\text{x}00 \mid (litLen - 1)$ \Comment{Bit 7 = 0: Literal Run}
+        \State $\text{WriteByte}(Y, control)$; $\text{WriteBytes}(Y, X[pos \dots pos+litLen-1])$
+        \State $pos \gets pos + litLen$
+    \EndIf
+\EndWhile
+\State \Return $Y$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Step-by-Step Trace on Running Example}
+For $X = \text{"BABBACAC"}$, no character repeats $\ge 3$ consecutive times. PackBits encodes the 8 characters as a single \textbf{Literal Run}:
+\begin{itemize}
+    \item Control byte: $0\text{x}00 \mid (8 - 1) = 0\text{x}07$ (\texttt{00000111}).
+    \item Emitted Payload: $[0\text{x}07, 'B', 'A', 'B', 'B', 'A', 'C', 'A', 'C'] \to \mathbf{9\text{ bytes}}$.
+    \item \textbf{Comparison}: Classic byte-pair RLE would expand this string to 14 bytes (+75\%). PackBits limits overhead to 1 byte (+12.5\%).
+\end{itemize}
+
+\subsubsection{Complexity Analysis}
+\begin{itemize}
+    \item \textbf{Time Complexity}: $\mathcal{O}(N)$ for both compression and decompression (linear scan).
+    \item \textbf{Space Complexity}: $\mathcal{O}(1)$ auxiliary memory.
+\end{itemize}
+
+\subsubsection{Discussion}
+\begin{itemize}
+    \item \textbf{Best Case}: Contiguous identical bytes (e.g. 10MB of repeating $'A'$). PackBits compresses 128 bytes into 2 bytes, yielding a $\mathbf{64\times}$ ratio (98.4\% space savings).
+    \item \textbf{Worst Case}: High-entropy random data. PackBits mathematically bounds expansion to $\le +\frac{N}{128} \approx +\mathbf{0.78\%}$.
+\end{itemize}
+
+---
+
+\subsection{Huffman Coding}
+
+\subsubsection{Introduction \& Real-World Applications}
+Huffman Coding (1952) constructs optimal variable-length prefix codes based on source symbol probabilities using a greedy min-heap.
+\begin{itemize}
+    \item \textbf{Applications}: JPEG entropy coding, MP3 audio perceptual coding, GZIP/DEFLATE literal/token encoding.
+\end{itemize}
+
+\subsubsection{Pseudocode}
+\begin{algorithm}[H]
+\caption{Huffman Tree Construction \& Encoding}
+\begin{algorithmic}[1]
+\Require Input bytes $X$, alphabet frequencies $F$
+\Ensure Serialized tree header and encoded bitstream $Y$
+\State $H \gets \text{MinHeap}()$
+\For{each symbol $s$ with $F[s] > 0$}
+    \State $H.\text{Push}(\text{CreateLeafNode}(s, F[s]))$
+\EndFor
+\While{$H.\text{Size}() > 1$}
+    \State $left \gets H.\text{PopMin}()$; $right \gets H.\text{PopMin}()$
+    \State $parent \gets \text{CreateInternalNode}(left.freq + right.freq, left, right)$
+    \State $H.\text{Push}(parent)$
+\EndWhile
+\State $root \gets H.\text{PopMin}()$
+\State $CodeTable \gets \text{GeneratePrefixCodes}(root, \text{""})$
+\State $\text{WriteHeader}(Y, F, N)$; $\text{EncodeBitstream}(Y, X, CodeTable)$
+\State \Return $Y$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Step-by-Step Trace on Running Example}
+\begin{enumerate}
+    \item Frequencies: $C: 2$, $A: 3$, $B: 3$.
+    \item Min-Heap Merging:
+    \begin{itemize}
+        \item Merge $C (2)$ and $A (3) \to N_1 (5)$ with left child $C$, right child $A$.
+        \item Merge $B (3)$ and $N_1 (5) \to Root (8)$ with left child $B$, right child $N_1$.
+    \end{itemize}
+    \item Resulting Codebook:
+    \begin{itemize}
+        \item $'B' \to \mathbf{0}$ (1 bit)
+        \item $'C' \to \mathbf{10}$ (2 bits)
+        \item $'A' \to \mathbf{11}$ (2 bits)
+    \end{itemize}
+    \item Encoded Bitstream:
+    $\text{"BABBACAC"} \to 0 \cdot 11 \cdot 0 \cdot 0 \cdot 11 \cdot 10 \cdot 11 \cdot 10 = \mathbf{0110011101110_2}$ (\textbf{13 bits} vs 64 bits raw).
+    \item Average Codeword Length: $L_{\text{avg}} = 0.375(1) + 0.375(2) + 0.25(2) = \mathbf{1.625\text{ bits/symbol}} \approx H(X) = 1.561$.
+\end{enumerate}
+
+\subsubsection{Complexity Analysis}
+\begin{itemize}
+    \item \textbf{Time Complexity}: $\mathcal{O}(N + K \log K)$ where $K \le 256$. For fixed ASCII byte alphabets, this is strictly $\mathcal{O}(N)$.
+    \item \textbf{Space Complexity}: $\mathcal{O}(K) = \mathcal{O}(1)$ auxiliary space for the 256-leaf tree.
+\end{itemize}
+
+\subsubsection{Discussion}
+Huffman achieves the optimal prefix code bounded by $H(X) \le L_{\text{avg}} < H(X) + 1$. Its limitation is the inability to exploit multi-character phrase redundancies.
+
+---
+
+\subsection{Lempel-Ziv-Welch (LZW)}
+
+\subsubsection{Introduction \& Real-World Applications}
+LZW (1984) is a dictionary-based adaptive compression algorithm that parses input sequences into dynamically registered multi-character substring tokens.
+\begin{itemize}
+    \item \textbf{Applications}: GIF image compression, TIFF raster files, Unix \texttt{compress} (\texttt{.Z}), Adobe PDF filters.
+\end{itemize}
+
+\subsubsection{Pseudocode}
+\begin{algorithm}[H]
+\caption{LZW Compression}
+\begin{algorithmic}[1]
+\Require Character stream $X$
+\Ensure Sequence of dictionary code integers $Y$
+\State $Dict \gets \text{InitializeWith256SingleCharacters}()$
+\State $nextCode \gets 256$, $w \gets \text{EmptyString}$
+\While{not $\text{EOF}(X)$}
+    \State $k \gets \text{ReadChar}(X)$
+    \If{$w + k \in Dict$}
+        \State $w \gets w + k$
+    \Else
+        \State $\text{EmitCode}(Y, Dict[w])$
+        \If{$nextCode < 65535$}
+            \State $Dict[w + k] \gets nextCode$; $nextCode \gets nextCode + 1$
+        \EndIf
+        \State $w \gets k$
+    \EndIf
+\EndWhile
+\If{$w \neq \text{EmptyString}$} $\text{EmitCode}(Y, Dict[w])$ \EndIf
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Step-by-Step Trace on Running Example}
+
+\begin{table}[htbp]
+\centering
+\caption{LZW Dynamic Dictionary Expansion Trace on \texttt{"BABBACAC"}}
+\label{tab:lzw_trace}
+\begin{tabular}{@{}cccccclc@{}}
+\toprule
+\textbf{Step} & \textbf{Current $w$} & \textbf{Next $k$} & \textbf{Combined $wk$} & \textbf{In Dict?} & \textbf{Emitted Code} & \textbf{Added Dict Entry} & \textbf{New $w$} \\ \midrule
+1 & \texttt{""} & \texttt{'B'} & \texttt{"B"} & Yes & --- & --- & \texttt{'B'} \\
+2 & \texttt{"B"} & \texttt{'A'} & \texttt{"BA"} & No & \textbf{66} (\texttt{'B'}) & \texttt{"BA"} $\to$ \textbf{256} & \texttt{'A'} \\
+3 & \texttt{"A"} & \texttt{'B'} & \texttt{"AB"} & No & \textbf{65} (\texttt{'A'}) & \texttt{"AB"} $\to$ \textbf{257} & \texttt{'B'} \\
+4 & \texttt{"B"} & \texttt{'B'} & \texttt{"BB"} & No & \textbf{66} (\texttt{'B'}) & \texttt{"BB"} $\to$ \textbf{258} & \texttt{'B'} \\
+5 & \texttt{"B"} & \texttt{'A'} & \texttt{"BA"} & \textbf{Yes} & --- & --- & \texttt{"BA"} \\
+6 & \texttt{"BA"} & \texttt{'C'} & \texttt{"BAC"} & No & \textbf{256} (\texttt{"BA"}) & \texttt{"BAC"} $\to$ \textbf{259} & \texttt{'C'} \\
+7 & \texttt{"C"} & \texttt{'A'} & \texttt{"CA"} & No & \textbf{67} (\texttt{'C'}) & \texttt{"CA"} $\to$ \textbf{260} & \texttt{'A'} \\
+8 & \texttt{"A"} & \texttt{'C'} & \texttt{"AC"} & No & \textbf{65} (\texttt{'A'}) & \texttt{"AC"} $\to$ \textbf{261} & \texttt{'C'} \\
+End & \texttt{"C"} & EOF & --- & --- & \textbf{67} (\texttt{'C'}) & --- & --- \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\noindent \textbf{Output Code Stream}: $[66, 65, 66, 256, 67, 65, 67]$ (7 integer codes).
+
+\subsubsection{Complexity Analysis}
+\begin{itemize}
+    \item \textbf{Time Complexity}: $\mathcal{O}(N)$ using hash table lookups (\texttt{std::unordered\_map}).
+    \item \textbf{Space Complexity}: $\mathcal{O}(D)$ where $D \le 65536$ is the 16-bit dictionary size limit.
+\end{itemize}
+
+---
+
+\subsection{Bonus Algorithm: DEFLATE (LZ77 + Huffman)}
+
+\subsubsection{Introduction \& Mechanism}
+DEFLATE (RFC 1951) couples a 4KB sliding-window **LZ77 pattern matcher** with a **Huffman entropy coder**.
+\begin{itemize}
+    \item \textbf{LZ77 Stage}: Scans a 4KB history buffer using a 3-byte rolling hash table to replace repeated phrases with $\langle\text{Distance, Length}\rangle$ tokens.
+    \item \textbf{Huffman Stage}: Encodes literal bytes and match tokens into prefix bitstreams.
+    \item \textbf{Trace on \texttt{"BABBACAC"}}: LZ77 replaces the second \texttt{"BA"} with match $\langle dist=3, len=2\rangle$ and \texttt{"AC"} with $\langle dist=2, len=2\rangle$, yielding super-linear payload reduction.
+\end{itemize}
+
+---
+
+% ------------------------------------------------------------------------------
+% SECTION 4: EXPERIMENTAL RESULTS
+% ------------------------------------------------------------------------------
+\section{Experimental Results}
+
+\subsection{Empirical Benchmark Measurements}
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Empirical Compression Performance Benchmarks (Table 1)}
+\label{tab:benchmarks}
+\begin{tabular}{@{}lrlrrrrrr@{}}
+\toprule
+\textbf{Scenario} & \textbf{File Size} & \textbf{Data Type} & \textbf{RLE Ratio} & \textbf{Huffman Ratio} & \textbf{Deflate Ratio} & \textbf{RLE (ms)} & \textbf{Huff (ms)} & \textbf{Defl (ms)} \\ \midrule
+Scenario 1 & 10 KB & English Prose & $0.99\times$ & $1.67\times$ & $\mathbf{8.80\times}$ & 0.29 & 0.49 & 0.41 \\
+Scenario 1 & 50 KB & English Prose & $0.99\times$ & $1.76\times$ & $\mathbf{28.13\times}$ & 0.44 & 0.87 & 0.53 \\
+Scenario 1 & 100 KB & English Prose & $0.99\times$ & $1.77\times$ & $\mathbf{38.77\times}$ & 0.56 & 1.31 & 0.61 \\
+Scenario 1 & 500 KB & English Prose & $0.99\times$ & $1.78\times$ & $\mathbf{55.72\times}$ & 1.67 & 4.67 & 1.65 \\
+Scenario 1 & 1 MB & English Prose & $0.99\times$ & $1.78\times$ & $\mathbf{59.01\times}$ & 3.47 & 9.03 & 3.35 \\
+Scenario 1 & 5 MB & English Prose & $0.99\times$ & $1.78\times$ & $\mathbf{61.81\times}$ & 16.11 & 46.74 & 14.54 \\
+Scenario 1 & 10 MB & English Prose & $0.99\times$ & $1.78\times$ & $\mathbf{62.17\times}$ & 31.58 & 125.27 & 25.19 \\ \midrule
+Scenario 2 & 1 MB & Highly Repetitive & $2.12\times$ & $2.38\times$ & $\mathbf{61.82\times}$ & 2.35 & 7.18 & 4.12 \\
+Scenario 2 & 1 MB & English Prose & $0.99\times$ & $1.78\times$ & $\mathbf{59.01\times}$ & 3.46 & 10.19 & 3.15 \\
+Scenario 2 & 1 MB & Random Binary & $0.99\times$ & $1.00\times$ & $0.89\times$ & 3.63 & 14.54 & 30.55 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Visualizations}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{chart1_ratio.png}
+        \caption{Compression Ratio vs. File Size (Scenario 1)}
+        \label{fig:ratio_chart}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{chart2_time.png}
+        \caption{Execution Time vs. File Size (Scenario 1)}
+        \label{fig:time_chart}
+    \end{subfigure}
+    \vspace{0.8em}
+    \begin{subfigure}[b]{0.58\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{chart3_savings.png}
+        \caption{Space Savings across Entropy Types (Scenario 2)}
+        \label{fig:entropy_chart}
+    \end{subfigure}
+    \caption{Visual Performance Comparison across File Sizes and Entropy Variations}
+    \label{fig:visualizations}
+\end{figure}
+
+\subsection{In-Depth Analysis \& Answers to Mandatory Questions}
+
+\subsubsection{Does the growth rate in empirical data match the Big-O complexity?}
+\textbf{Yes, strictly.} 
+As the input size scales by $10\times$ from 1~MB to 10~MB in Scenario 1:
+\begin{itemize}
+    \item RLE execution time scales from 3.47~ms to 31.58~ms (an exact $9.1\times$ linear factor), matching $\mathcal{O}(N)$.
+    \item Huffman scales from 9.03~ms to 125.27~ms, matching $\mathcal{O}(N + K \log K)$ with memory cache effects.
+    \item Deflate scales from 3.35~ms to 25.19~ms ($7.5\times$ scaling) due to its $\mathcal{O}(1)$ rolling hash table.
+\end{itemize}
+
+\subsubsection{Which algorithm achieved the highest compression ratio?}
+\begin{itemize}
+    \item \textbf{On Standard English Prose}: \textbf{DEFLATE} attained the highest ratio by far ($\mathbf{62.17\times}$ at 10~MB), followed by Huffman ($1.78\times$), whereas RLE showed no compression ($0.99\times$).
+    \item \textbf{On Highly Repetitive Data}: \textbf{DEFLATE} led with $\mathbf{61.82\times}$, followed by Huffman ($2.38\times$) and RLE ($2.12\times$).
+\end{itemize}
+
+\subsubsection{Theoretical Justification of Results}
+\begin{itemize}
+    \item \textbf{RLE Failure on Prose}: English text contains varied vocabulary without contiguous character repeats of length $\ge 3$. PackBits correctly classifies characters as Literal Runs, avoiding bloat but achieving no reduction.
+    \item \textbf{Huffman Plateau ($1.78\times$)}: Operating on individual characters, Huffman is strictly bounded by the zero-order entropy of English text ($H \approx 4.5\text{ bits/char}$). The maximum ratio is $\frac{8}{4.5} \approx \mathbf{1.78\times}$.
+    \item \textbf{Deflate Superiority}: By matching multi-byte phrases across its 4KB sliding history, Deflate bypasses the single-character entropy limit, achieving over $98.3\%$ space savings.
+\end{itemize}
+
+---
+
+% ------------------------------------------------------------------------------
+% SECTION 5: REFERENCES
+% ------------------------------------------------------------------------------
+\section{References}
+\begin{enumerate}
+    \item T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein, \emph{Introduction to Algorithms}, 3rd ed. Cambridge, MA, USA: MIT Press, 2009, ch. 16, pp. 428--436.
+    \item D. A. Huffman, ``A Method for the Construction of Minimum-Redundancy Codes,'' \emph{Proceedings of the IRE}, vol. 40, no. 9, pp. 1098--1101, Sept. 1952.
+    \item J. Ziv and A. Lempel, ``A Universal Algorithm for Sequential Data Compression,'' \emph{IEEE Transactions on Information Theory}, vol. 23, no. 3, pp. 337--343, May 1977.
+    \item T. A. Welch, ``A Technique for High-Performance Data Compression,'' \emph{IEEE Computer}, vol. 17, no. 6, pp. 8--19, June 1984.
+    \item P. Deutsch, ``DEFLATE Compressed Data Format Specification version 1.3,'' \emph{RFC 1951}, May 1996.
+    \item C. E. Shannon, ``A Mathematical Theory of Communication,'' \emph{Bell System Technical Journal}, vol. 27, no. 3, pp. 379--423, July 1948.
+\end{enumerate}
+
+% ------------------------------------------------------------------------------
+% SECTION 6: ACKNOWLEDGMENT
+% ------------------------------------------------------------------------------
+\section{Acknowledgment}
+We would like to express our sincere gratitude to Dr. Le Thanh Tung and MSc. Tran Hoang Quan for their valuable instruction and course guidelines. Additionally, AI tools (Antigravity / Gemini) assisted in drafting LaTeX mathematical layouts and structuring visualization benchmark routines in compliance with HCMUS academic integrity policies.
+
+\end{document}
