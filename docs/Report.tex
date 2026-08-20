@@ -358,6 +358,7 @@ LZW (1984) is a dictionary-based adaptive compression algorithm that parses inpu
 \centering
 \caption{LZW Dynamic Dictionary Expansion Trace on \texttt{"BABBACAC"}}
 \label{tab:lzw_trace}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}cccccclc@{}}
 \toprule
 \textbf{Step} & \textbf{Current $w$} & \textbf{Next $k$} & \textbf{Combined $wk$} & \textbf{In Dict?} & \textbf{Emitted Code} & \textbf{Added Dict Entry} & \textbf{New $w$} \\ \midrule
@@ -370,7 +371,8 @@ LZW (1984) is a dictionary-based adaptive compression algorithm that parses inpu
 7 & \texttt{"C"} & \texttt{'A'} & \texttt{"CA"} & No & \textbf{67} (\texttt{'C'}) & \texttt{"CA"} $\to$ \textbf{260} & \texttt{'A'} \\
 8 & \texttt{"A"} & \texttt{'C'} & \texttt{"AC"} & No & \textbf{65} (\texttt{'A'}) & \texttt{"AC"} $\to$ \textbf{261} & \texttt{'C'} \\
 End & \texttt{"C"} & EOF & --- & --- & \textbf{67} (\texttt{'C'}) & --- & --- \\ \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \noindent \textbf{Output Code Stream}: $[66, 65, 66, 256, 67, 65, 67]$ (7 integer codes).
@@ -404,9 +406,9 @@ DEFLATE (RFC 1951) couples a 4KB sliding-window **LZ77 pattern matcher** with a 
 
 \begin{table}[htbp]
 \centering
-\small
 \caption{Empirical Compression Performance Benchmarks (Table 1)}
 \label{tab:benchmarks}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}lrlrrrrrr@{}}
 \toprule
 \textbf{Scenario} & \textbf{File Size} & \textbf{Data Type} & \textbf{RLE Ratio} & \textbf{Huffman Ratio} & \textbf{Deflate Ratio} & \textbf{RLE (ms)} & \textbf{Huff (ms)} & \textbf{Defl (ms)} \\ \midrule
@@ -420,7 +422,8 @@ Scenario 1 & 10 MB & English Prose & $0.99\times$ & $1.78\times$ & $\mathbf{62.1
 Scenario 2 & 1 MB & Highly Repetitive & $2.12\times$ & $2.38\times$ & $\mathbf{61.82\times}$ & 2.35 & 7.18 & 4.12 \\
 Scenario 2 & 1 MB & English Prose & $0.99\times$ & $1.78\times$ & $\mathbf{59.01\times}$ & 3.46 & 10.19 & 3.15 \\
 Scenario 2 & 1 MB & Random Binary & $0.99\times$ & $1.00\times$ & $0.89\times$ & 3.63 & 14.54 & 30.55 \\ \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \subsection{Visualizations}
