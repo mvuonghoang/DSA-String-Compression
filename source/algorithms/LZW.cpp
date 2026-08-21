@@ -1,145 +1,158 @@
-string readfile(const string filename)
-{
-	ifstream fin(filename, ios::binary);
-	string bodem = "";
-	if (!fin.is_open()) 
-	{
-		cout << "Cannot open this file: " << filename << "\n";
-		return "";
-	}
-	stringstream buffer;
-	buffer << fin.rdbuf();
-	fin.close();
-	return buffer.str();
-}
-bool writefile(const string filename, const string code)
-{
-	ofstream fout(filename, ios::binary);
-	if (!fout.is_open())
-	{
-		cout << "Cannot open this file: " << "\n";
-		return false;
-	}
-	fout << code;
-	fout.close();
-	return true;
-}
-int checkinDictionary(const vector<string>& dictionary, string bodem)
-{
-	int left = 0;
-	int right = dictionary.size() - 1;
-	if (bodem.length() == 1)
-	{
-		while (left <= right)
-		{
-			int mid = (left + right) / 2;
-			if (dictionary[mid] == bodem)
-				return mid;
-			else if (dictionary[mid] < bodem)
-				left = mid + 1;
-			else
-				right = mid - 1;
-		}
-	}
-	else
-	{
-		for (int i = 256; i < dictionary.size(); i++)
-		{
-			if (dictionary[i] == bodem)
-				return i;
-		}
-	}
-	return -1;
-}
-vector<string> initDictionary()
-{
-	vector<string> dictionary(256);
-	for (int i = 0; i < 256; i++)
-	{
-		dictionary[i] = (char)i;
-	}
-	return dictionary;
-}
-string compress(const string& text) // nen du lieu 
-{
-	if (text.empty()) return "";
-	string w = "";
-	vector<int> res;
-	vector<string>dictionary = initDictionary();
-	for (int i = 0; i < text.length(); i++)
-	{
-		char kytu = text[i];
-		string nw = w + kytu;
-		if (checkinDictionary(dictionary, nw)!= -1)
-			w = nw;
-		else
-		{
-			dictionary.push_back(nw);
-			res.push_back(checkinDictionary(dictionary, w));
-			w = nw[nw.length() - 1];
-		}
+#include "LZW.h"
+#include "../common/Timer.h"
+#include <fstream>
+#include <stdexcept>
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <cstdint>
 
-	}
-	string output = "";
-	for (int i = 0; i < res.size(); i++)
-	{
-		output += to_string(res[i]) + " ";
-	}
-	return output;
+CompressionMetrics LZW::compress(const std::string& inputPath, const std::string& outputPath) {
+    CompressionMetrics metrics;
+    metrics.algorithmName = "LZW";
+
+    std::ifstream inFile(inputPath, std::ios::binary);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("Cannot open input file: " + inputPath);
+    }
+
+    inFile.seekg(0, std::ios::end);
+    uint64_t originalSize = inFile.tellg();
+    inFile.seekg(0, std::ios::beg);
+    metrics.originalSizeBytes = originalSize;
+
+    Timer timer;
+    timer.start();
+
+    std::string text((std::istreambuf_iterator<char>(inFile)), std::istreambuf_iterator<char>());
+    inFile.close();
+
+    std::vector<uint16_t> resultCodes;
+    if (!text.empty()) {
+        std::unordered_map<std::string, uint16_t> dictionary;
+        for (int i = 0; i < 256; i++) {
+            dictionary[std::string(1, (char)i)] = static_cast<uint16_t>(i);
+        }
+
+        std::string w = "";
+        uint16_t dictSize = 256;
+
+        for (char c : text) {
+            std::string wc = w + c;
+            if (dictionary.count(wc)) {
+                w = wc;
+            } else {
+                resultCodes.push_back(dictionary[w]);
+                if (dictSize < 65535) { 
+                    dictionary[wc] = dictSize++;
+                }
+                w = std::string(1, c);
+            }
+        }
+
+        if (!w.empty()) {
+            resultCodes.push_back(dictionary[w]);
+        }
+    }
+
+    std::ofstream outFile(outputPath, std::ios::binary);
+    if (!outFile.is_open()) {
+        throw std::runtime_error("Cannot open output file: " + outputPath);
+    }
+
+    size_t codeCount = resultCodes.size();
+    outFile.write(reinterpret_cast<const char*>(&codeCount), sizeof(codeCount));
+    if (codeCount > 0) {
+        outFile.write(reinterpret_cast<const char*>(resultCodes.data()), codeCount * sizeof(uint16_t));
+    }
+
+    outFile.flush();
+    outFile.seekp(0, std::ios::end);
+    uint64_t compressedSize = outFile.tellp();
+    metrics.compressedSizeBytes = compressedSize;
+
+    timer.stop();
+    metrics.executionTimeMs = timer.elapsedMilliseconds();
+    outFile.close();
+
+    return metrics; 
 }
-string decompress(const string& num) // giai nen du lieu 
-{
-	stringstream ss(num);
-	vector<int>res;
-	vector<string>dictionary = initDictionary();
-	string temp = "";
-	// doc ma
-	while (getline(ss, temp, ' '))
-	{
-		res.push_back(stoi(temp));
-	}
-	// doi lai thanh chu
-	temp = "";
-	int old = res[0];
-	string w = dictionary[old];
-	string result = w;
-	for (int i = 1; i < res.size(); i++)
-	{
-		int id = res[i];
-		if (id < dictionary.size())
-		{
-			temp = dictionary[id];
-		}
-		else if (id == dictionary.size())
-		{
-			temp = w + w[0];
-		}
-		result += temp;
-		dictionary.push_back(w + temp[0]);
-		w = temp;
-	}
-	return result;
-}
-long long getFileSize(const string& filename) {
-	ifstream file(filename, ios::binary | ios::ate);
-	if (!file.is_open()) return 0;
-	return file.tellg(); 
-}
-void output(string algo, long long initial, long long after, double ratio, double ssaving)
-{
-	cout << "Compression complete." << "\n";
-	cout << "-------------------------------" << "\n";
-	cout << "Algorithm: " <<algo << "\n";
-	cout << "Original size: " << initial << "\n";
-	cout << "Compressed size: " << after << "\n";
-	cout << "Compression ratio: " << ratio << "\n";
-	cout << "Space saving: " << ssaving << "\n";
-}
-double calcRatio(long long initial, long long after)
-{
-	return (initial * 1.0 / after);
-}
-double calcSpaceS(long long initial, long long after)
-{
-	return 1 - (after * 1.0 / initial);
+
+CompressionMetrics LZW::decompress(const std::string& inputPath, const std::string& outputPath) {
+    CompressionMetrics metrics;
+    metrics.algorithmName = "LZW";
+
+    std::ifstream inFile(inputPath, std::ios::binary);
+    if (!inFile.is_open()) {
+        throw std::runtime_error("Cannot open input file: " + inputPath);
+    }
+
+    inFile.seekg(0, std::ios::end);
+    uint64_t compressedSize = inFile.tellg();
+    inFile.seekg(0, std::ios::beg);
+    metrics.compressedSizeBytes = compressedSize;
+
+    Timer timer;
+    timer.start();
+
+    size_t codeCount = 0;
+    inFile.read(reinterpret_cast<char*>(&codeCount), sizeof(codeCount));
+
+    std::vector<uint16_t> compressedCodes(codeCount);
+    if (codeCount > 0) {
+        inFile.read(reinterpret_cast<char*>(compressedCodes.data()), codeCount * sizeof(uint16_t));
+    }
+    inFile.close();
+
+    std::string result = "";
+    if (!compressedCodes.empty()) {
+        std::vector<std::string> dictionary(256);
+        for (int i = 0; i < 256; i++) {
+            dictionary[i] = std::string(1, (char)i);
+        }
+
+        uint16_t dictSize = 256;
+        uint16_t oldCode = compressedCodes[0];
+        std::string s = dictionary[oldCode];
+        result = s;
+        std::string c = std::string(1, s[0]);
+
+        for (size_t i = 1; i < compressedCodes.size(); i++) {
+            uint16_t newCode = compressedCodes[i];
+            std::string entry = "";
+            if (newCode < dictSize) {
+                entry = dictionary[newCode];
+            } else if (newCode == dictSize) {
+                entry = s + c;
+            } else {
+                throw std::runtime_error("Invalid LZW compressed code during decompression.");
+            }
+
+            result += entry;
+            c = std::string(1, entry[0]);
+            if (dictSize < 65535) {
+                dictionary.push_back(s + c);
+                dictSize++;
+            }
+            s = entry;
+        }
+    }
+
+    std::ofstream outFile(outputPath, std::ios::binary);
+    if (!outFile.is_open()) {
+        throw std::runtime_error("Cannot open output file: " + outputPath);
+    }
+
+    outFile.write(result.data(), result.size());
+    outFile.flush();
+
+    outFile.seekp(0, std::ios::end);
+    uint64_t originalSize = outFile.tellp();
+    metrics.originalSizeBytes = originalSize;
+
+    timer.stop();
+    metrics.executionTimeMs = timer.elapsedMilliseconds();
+    outFile.close();
+
+    return metrics;
 }
