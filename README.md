@@ -64,7 +64,7 @@ compressor -a [algorithm] -m [mode] -i [input_file] -o [output_file]
 ├── .gitignore
 ├── README.md
 ├── readme.txt           # User manual and submission specifications
-├── video.txt            # Video demonstration YouTube URL & timestamps
+├── video.txt            # Video demonstration YouTube URL
 ├── Report.pdf           # Formal comprehensive project report
 ├── source/              # C++17 source code
 │   ├── main.cpp         # CLI entry point & argument parser
