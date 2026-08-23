@@ -75,7 +75,7 @@
 \begin{titlepage}
 \centering
 
-\vspace*{-0.5cm}
+\vspace*{-1cm}
 \includegraphics[width=3.5cm]{hcmus_logo.png}\\[0.4cm]
 
 {\large
@@ -98,9 +98,9 @@ VIETNAM NATIONAL UNIVERSITY HO CHI MINH CITY\\
 \noindent\begin{tabularx}{\textwidth}{|l|c|>{\raggedright\arraybackslash}X|c|}
 \hline
 \textbf{Full Name} & \textbf{Student ID} & \textbf{Core Responsibilities} & \textbf{Contribution} \\ \hline
-Trần Ngọc Mỹ Trinh & 25127258 & Huffman Coding, Deflate (Huffman Token Coder), CLI \& BitStream I/O, Report Lead & 33.3\% \\ \hline
-Lý Sĩ Vĩ & 24127587 & RLE Algorithm, Deflate (LZ77 Sliding Matcher), Benchmark Suite, Experiments & 33.3\% \\ \hline
-Từ Nguyễn Thuận Thiên & 25127146 & LZW Algorithm, Deflate (LZ77 Reconstructor), Bit-packing, Demo, Readme & 33.3\% \\ \hline
+Trần Ngọc Mỹ Trinh & 25127258 & Huffman Coding, Deflate (Huffman Token Coder), CLI \& BitStream I/O, Report Lead, Video Production \& Demo & 33.3\% \\ \hline
+Lý Sĩ Vĩ & 24127587 & RLE Algorithm, Deflate (LZ77 Sliding Matcher), Benchmark Suite, Experiments, Report & 33.3\% \\ \hline
+Từ Nguyễn Thuận Thiên & 25127146 & LZW Algorithm, Deflate (LZ77 Reconstructor), Bit-packing, Readme, Report & 33.3\% \\ \hline
 \end{tabularx}
 
 \vfill
@@ -211,7 +211,7 @@ The project follows a modular, object-oriented C++17 architecture adhering to cl
 
 \begin{lstlisting}[language=bash, caption={CLI Command Usage Examples}]
 # Compile the unified compressor executable
-g++ source/*.cpp -o compressor -std=c++17 -O3
+g++ source/main.cpp source/algorithms/*.cpp -o compressor -std=c++17 -O3
 
 # Compress and decompress using Huffman Coding
 ./compressor -a huff -m c -i tests/sample.txt -o tests/sample.huff
@@ -294,7 +294,12 @@ Run-Length Encoding (RLE) replaces consecutive sequences of identical symbols wi
         \item Control Byte: $0\text{x}00 \mid (8 - 1) = 0\text{x}07$ (\texttt{00000111}).
         \item Emitted Payload: $[0\text{x}07, 'B', 'A', 'B', 'B', 'A', 'C', 'A', 'C'] \implies \mathbf{9\text{ bytes}}$.
     \end{itemize}
-    \item \textbf{Efficiency Comparison}: Naive pair RLE would emit $[1,'B', 1,'A', 2,'B', 1,'A', 1,'C', 1,'A', 1,'C'] \to \mathbf{14\text{ bytes}}$ (+75\% expansion). PackBits limits expansion overhead to only 1 control byte (+12.5\%).
+    \item \textbf{Efficiency Comparison}: Naive pair RLE would emit:
+    \begin{center}
+    $[1,\!'\!B\!',\ 1,\!'\!A\!',\ 2,\!'\!B\!',\ 1,\!'\!A\!',\ 1,\!'\!C\!',\ 1,\!'\!A\!',\ 1,\!'\!C\!'] \to \mathbf{14\text{ bytes}} \quad (+75\%\text{ expansion})$
+    \end{center}
+    \vspace{-0.5em}
+    PackBits limits expansion overhead to only 1 control byte (+12.5\%).
 \end{itemize}
 
 \subsubsection{Complexity Analysis}
@@ -531,23 +536,23 @@ All benchmarks were compiled with \texttt{g++ -std=c++17 -O3} and measured using
 
 \begin{table}[H]
 \centering
-\caption{Comprehensive Experimental Benchmark Results (Table 1)}
+\caption{Comprehensive Experimental Benchmark Results}
 \label{tab:benchmarks}
 \renewcommand{\arraystretch}{1.15}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|r|l|r|r|r|r|r|r|}
+\begin{tabular}{|l|r|l|r|r|r|r|r|r|r|r|}
 \hline
-\textbf{Scenario} & \textbf{Size} & \textbf{Data Type} & \textbf{RLE Ratio} & \textbf{Huffman Ratio} & \textbf{Deflate Ratio} & \textbf{RLE (ms)} & \textbf{Huff (ms)} & \textbf{Defl (ms)} \\ \hline
-Scenario 1 & 10 KB & English Prose & $0.99\times$ (-0.9\%) & $1.67\times$ (40.1\%) & $\mathbf{8.80\times}$ (88.6\%) & 0.29 & 0.49 & 0.41 \\ \hline
-Scenario 1 & 50 KB & English Prose & $0.99\times$ (-0.8\%) & $1.76\times$ (43.0\%) & $\mathbf{28.13\times}$ (96.4\%) & 0.44 & 0.87 & 0.53 \\ \hline
-Scenario 1 & 100 KB & English Prose & $0.99\times$ (-0.8\%) & $1.77\times$ (43.4\%) & $\mathbf{38.77\times}$ (97.4\%) & 0.56 & 1.31 & 0.61 \\ \hline
-Scenario 1 & 500 KB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.7\%) & $\mathbf{55.72\times}$ (98.2\%) & 1.67 & 4.67 & 1.65 \\ \hline
-Scenario 1 & 1 MB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.7\%) & $\mathbf{59.01\times}$ (98.3\%) & 3.47 & 9.03 & 3.35 \\ \hline
-Scenario 1 & 5 MB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.8\%) & $\mathbf{61.81\times}$ (98.4\%) & 16.11 & 46.74 & 14.54 \\ \hline
-Scenario 1 & 10 MB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.8\%) & $\mathbf{62.17\times}$ (98.4\%) & 31.58 & 125.27 & 25.19 \\ \hline
-Scenario 2 & 1 MB & Highly Repetitive & $2.12\times$ (52.9\%) & $2.38\times$ (58.1\%) & $\mathbf{61.82\times}$ (98.4\%) & 2.35 & 7.18 & 4.12 \\ \hline
-Scenario 2 & 1 MB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.7\%) & $\mathbf{59.01\times}$ (98.3\%) & 3.46 & 10.19 & 3.15 \\ \hline
-Scenario 2 & 1 MB & Random Binary & $0.99\times$ (-0.8\%) & $1.00\times$ (-0.2\%) & $0.89\times$ (-12.7\%) & 3.63 & 14.54 & 30.55 \\ \hline
+\textbf{Scenario} & \textbf{Size} & \textbf{Data Type} & \textbf{RLE Ratio} & \textbf{Huffman Ratio} & \textbf{LZW Ratio} & \textbf{Deflate Ratio} & \textbf{RLE (ms)} & \textbf{Huff (ms)} & \textbf{LZW (ms)} & \textbf{Defl (ms)} \\ \hline
+Scenario 1 & 10 KB & English Prose & $0.99\times$ (-0.9\%) & $1.67\times$ (40.1\%) & $1.86\times$ (46.4\%) & $\mathbf{8.80\times}$ (88.6\%) & 0.29 & 0.49 & 0.98 & 0.41 \\ \hline
+Scenario 1 & 50 KB & English Prose & $0.99\times$ (-0.8\%) & $1.76\times$ (43.0\%) & $3.50\times$ (71.4\%) & $\mathbf{28.13\times}$ (96.4\%) & 0.44 & 0.87 & 3.54 & 0.53 \\ \hline
+Scenario 1 & 100 KB & English Prose & $0.99\times$ (-0.8\%) & $1.77\times$ (43.4\%) & $4.69\times$ (78.7\%) & $\mathbf{38.77\times}$ (97.4\%) & 0.56 & 1.31 & 6.56 & 0.61 \\ \hline
+Scenario 1 & 500 KB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.7\%) & $9.80\times$ (89.8\%) & $\mathbf{55.72\times}$ (98.2\%) & 1.67 & 4.67 & 18.76 & 1.65 \\ \hline
+Scenario 1 & 1 MB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.7\%) & $13.80\times$ (92.8\%) & $\mathbf{59.01\times}$ (98.3\%) & 3.47 & 9.03 & 38.34 & 3.35 \\ \hline
+Scenario 1 & 5 MB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.8\%) & $29.07\times$ (96.6\%) & $\mathbf{61.81\times}$ (98.4\%) & 16.11 & 46.74 & 220.40 & 14.54 \\ \hline
+Scenario 1 & 10 MB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.8\%) & $35.33\times$ (97.2\%) & $\mathbf{62.17\times}$ (98.4\%) & 31.58 & 125.27 & 389.77 & 25.19 \\ \hline
+Scenario 2 & 1 MB & Highly Repetitive & $2.12\times$ (52.9\%) & $2.38\times$ (58.1\%) & $30.65\times$ (96.7\%) & $\mathbf{61.82\times}$ (98.4\%) & 2.35 & 7.18 & 40.04 & 4.12 \\ \hline
+Scenario 2 & 1 MB & English Prose & $0.99\times$ (-0.8\%) & $1.78\times$ (43.7\%) & $13.80\times$ (92.8\%) & $\mathbf{59.01\times}$ (98.3\%) & 3.46 & 10.19 & 42.26 & 3.15 \\ \hline
+Scenario 2 & 1 MB & Random Binary & $0.99\times$ (-0.8\%) & $1.00\times$ (-0.2\%) & $0.80\times$ (-24.5\%) & $0.89\times$ (-12.7\%) & 3.63 & 14.54 & 45.52 & 30.55 \\ \hline
 \end{tabular}%
 }
 \end{table}
@@ -593,6 +598,7 @@ Scenario 2 & 1 MB & Random Binary & $0.99\times$ (-0.8\%) & $1.00\times$ (-0.2\%
     \begin{itemize}
         \item \textbf{RLE}: Execution time increases from 3.47\,ms to 31.58\,ms (a $9.1\times$ linear scale), perfectly verifying $\mathcal{O}(N)$ single-pass byte processing.
         \item \textbf{Huffman Coding}: Execution time scales from 9.03\,ms to 125.27\,ms, matching $\mathcal{O}(N)$ payload encoding with cache-miss overhead at 10\,MB scale.
+        \item \textbf{LZW}: Execution time scales from 38.34\,ms to 389.77\,ms (a $10.2\times$ scale), confirming $\mathcal{O}(N)$ average-case complexity with $\mathcal{O}(1)$ amortized hash table dictionary lookups per input byte.
         \item \textbf{Deflate}: Scales from 3.35\,ms to 25.19\,ms ($7.5\times$ scale) due to the $\mathcal{O}(1)$ rolling hash lookup per sliding-window step.
     \end{itemize}
 \end{itemize}
@@ -600,9 +606,9 @@ Scenario 2 & 1 MB & Random Binary & $0.99\times$ (-0.8\%) & $1.00\times$ (-0.2\%
 \subsection{Comparative Analysis of Compression Ratios}
 \textbf{Which algorithm achieved the highest compression ratio?}
 \begin{itemize}
-    \item \textbf{On Natural English Prose}: \textbf{DEFLATE} achieved the highest compression ratio by a vast margin ($\mathbf{62.17\times}$ at 10\,MB, 98.4\% space savings), followed by \textbf{Huffman Coding} ($1.78\times$, 43.8\% savings). \textbf{RLE} produced no compression ($0.99\times$).
-    \item \textbf{On Highly Repetitive Data}: \textbf{DEFLATE} led at $\mathbf{61.82\times}$ (98.4\%), while both \textbf{Huffman} ($2.38\times$) and \textbf{RLE} ($2.12\times$) delivered solid space savings ($> 52\%$).
-    \item \textbf{On Random Binary Data}: All algorithms experienced slight expansion or zero compression due to maximum entropy ($H \approx 8.0\text{ bits/byte}$).
+    \item \textbf{On Natural English Prose}: \textbf{DEFLATE} achieved the highest compression ratio by a vast margin ($\mathbf{62.17\times}$ at 10\,MB, 98.4\% space savings), followed by \textbf{LZW} ($35.33\times$, 97.2\% savings), \textbf{Huffman Coding} ($1.78\times$, 43.8\% savings). \textbf{RLE} produced no compression ($0.99\times$).
+    \item \textbf{On Highly Repetitive Data}: \textbf{DEFLATE} led at $\mathbf{61.82\times}$ (98.4\%), followed closely by \textbf{LZW} ($30.65\times$, 96.7\%), while both \textbf{Huffman} ($2.38\times$) and \textbf{RLE} ($2.12\times$) delivered moderate space savings ($> 52\%$).
+    \item \textbf{On Random Binary Data}: All algorithms experienced slight expansion or zero compression due to maximum entropy ($H \approx 8.0\text{ bits/byte}$). \textbf{LZW} suffered the worst expansion ($-24.5\%$) due to 16-bit code overhead on single-byte entries, followed by \textbf{DEFLATE} ($-12.7\%$).
 \end{itemize}
 
 \subsection{Theoretical Justification of Algorithmic Boundaries}
@@ -613,8 +619,33 @@ Scenario 2 & 1 MB & Random Binary & $0.99\times$ (-0.8\%) & $1.00\times$ (-0.2\%
     \text{Ratio}_{\max} = \frac{8.0\text{ bits}}{4.5\text{ bits}} \approx \mathbf{1.78\times}
     \end{equation}
     Huffman achieves this exact theoretical limit across all file sizes $\ge 500\text{ KB}$.
+    \item \textbf{Why LZW Compression Ratio Scales with File Size}: Unlike Huffman's fixed-ratio plateau, LZW's compression ratio improves continuously as file size increases ($1.86\times$ at 10\,KB $\to$ $35.33\times$ at 10\,MB). This is because the adaptive dictionary accumulates longer multi-character entries over time, allowing each emitted code to represent progressively more input bytes. However, this comes at the cost of higher execution time due to dictionary management overhead.
     \item \textbf{Why Deflate Outperforms Single-Symbol Entropy Coders}: Deflate matches multi-byte substrings (e.g., words like \texttt{" compression "}) across its 4\,KB history buffer, replacing 13 bytes with a single 4-byte match token. This exploits higher-order contextual redundancies, breaking the 0-order Shannon entropy barrier.
 \end{enumerate}
+
+\subsection{Comparative Summary of All Four Algorithms}
+Table~\ref{tab:algo_summary} consolidates the key theoretical and empirical characteristics of all four implemented compression algorithms.
+
+\begin{table}[H]
+\centering
+\caption{Comparative Summary of Algorithm Properties}
+\label{tab:algo_summary}
+\renewcommand{\arraystretch}{1.3}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Property} & \textbf{RLE (PackBits)} & \textbf{Huffman Coding} & \textbf{LZW} & \textbf{DEFLATE} \\ \hline
+\textbf{Type} & Run-length & Entropy (prefix code) & Dictionary-based & Hybrid (LZ77 + Huffman) \\ \hline
+\textbf{Time Complexity} & $\mathcal{O}(N)$ & $\mathcal{O}(N + K \log K)$ & $\mathcal{O}(N)$ avg. & $\mathcal{O}(N)$ \\ \hline
+\textbf{Space Complexity} & $\mathcal{O}(1)$ & $\mathcal{O}(K)$ & $\mathcal{O}(D)$, $D \le 65536$ & $\mathcal{O}(W)$, $W = 4\text{ KB}$ \\ \hline
+\textbf{Best Suited For} & Contiguous repeated bytes & Skewed symbol frequencies & Repeated multi-char phrases & General-purpose data \\ \hline
+\textbf{Best Ratio (10\,MB)} & $0.99\times$ & $1.78\times$ & $35.33\times$ & $\mathbf{62.17\times}$ \\ \hline
+\textbf{Worst Case} & Non-repeating data ($+0.78\%$) & Uniform random ($\approx 0\%$) & Short files / random ($-24.5\%$) & Random data ($-12.7\%$) \\ \hline
+\textbf{Key Strength} & Simplicity, $\mathcal{O}(1)$ memory & Optimal prefix code & Adaptive, no pre-scan needed & Highest compression ratio \\ \hline
+\textbf{Key Weakness} & Single-byte patterns only & No multi-byte matching & Slow on large files & Complex implementation \\ \hline
+\end{tabular}%
+}
+\end{table}
 
 % =========================================================
 % SECTION 6: CONCLUSION & FUTURE WORK
@@ -652,6 +683,6 @@ Scenario 2 & 1 MB & Random Binary & $0.99\times$ (-0.8\%) & $1.00\times$ (-0.2\%
 % SECTION 8: ACKNOWLEDGMENT
 % =========================================================
 \section{Acknowledgment}
-\textit{Support was provided by our instructors, Dr. Le Thanh Tung and MSc. Tran Hoang Quan, in guiding the theoretical foundations and course specifications, among others. In addition, AI tools, such as Claude, Antigravity, Chat GPT, assisted with drafting the mathematical formulations of the report and structuring the experimental benchmark scripts.}
+\textit{Support was provided by our instructors, Dr. Le Thanh Tung and MSc. Tran Hoang Quan, in guiding the theoretical foundations and course specifications. In addition, AI tools, such as Claude, Antigravity, Chat GPT, assisted with drafting the mathematical formulations of the report and structuring the experimental benchmark scripts.}
 
 \end{document}

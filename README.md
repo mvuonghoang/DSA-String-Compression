@@ -11,9 +11,9 @@
 
 | Member | Student ID | Algorithm Focus | Responsibilities |
 | :--- | :--- | :--- | :--- |
-| **Member&nbsp;1** | *25127258* | **Huffman Coding** | CLI Framework, Timer & Metrics, BitStream I/O, Huffman Tree, Report Lead |
-| **Member&nbsp;2** | *24127587* | **Run-Length Encoding (RLE)** | RLE Implementation, Test Data Generator, Benchmark Experiments, Report Results |
-| **Member&nbsp;3** | *25127146* | **Lempel-Ziv-Welch (LZW)** | LZW Dynamic Dictionary, Bit-packing, Video Demo, Readme Guide |
+| **Member&nbsp;1** | *25127258* | **Huffman Coding** | CLI Framework, Timer & Metrics, BitStream I/O, Huffman Tree, Report Lead, Video Production & Demo |
+| **Member&nbsp;2** | *24127587* | **Run-Length Encoding (RLE)** | RLE Implementation, Test Data Generator, Benchmark Experiments, Report |
+| **Member&nbsp;3** | *25127146* | **Lempel-Ziv-Welch (LZW)** | LZW Dynamic Dictionary, Bit-packing, Readme Guide, Report |
 | **Team** | *All* | **Deflate** | Combination of LZ77 sliding window + Huffman coding |
 
 ---
@@ -24,7 +24,7 @@ The project strictly adheres to **C++17** using standard libraries only.
 
 ```bash
 # Compile all source files into the compressor executable
-g++ source/*.cpp -o compressor -std=c++17 -O3
+g++ source/main.cpp source/algorithms/*.cpp -o compressor -std=c++17 -O3
 ```
 
 ---
@@ -63,13 +63,21 @@ compressor -a [algorithm] -m [mode] -i [input_file] -o [output_file]
 ```text
 ├── .gitignore
 ├── README.md
-├── source/              # C++ source and header files
-│   ├── main.cpp         # Entry point & CLI parsing
+├── readme.txt           # User manual and submission specifications
+├── video.txt            # Video demonstration YouTube URL & timestamps
+├── Report.pdf           # Formal comprehensive project report
+├── source/              # C++17 source code
+│   ├── main.cpp         # CLI entry point & argument parser
 │   ├── common/          # Common utilities (Timer, BitStream, Metrics)
 │   └── algorithms/      # RLE, Huffman, LZW, Deflate implementations
-├── tests/               # Test datasets and test runners
-│   └── sample.txt
-└── docs/                # Report drafting, LaTeX / markdown notes
+├── tests/               # Datasets, Python test generator & benchmark runner
+│   ├── sample.txt
+│   ├── generate_testcases.py
+│   └── run_benchmarks.py
+└── docs/                # Report LaTeX source, assets, and figures
+    ├── Report.tex       # LaTeX source code
+    ├── hcmus_logo.png   # University emblem
+    └── chart[1-3]_*.png # Benchmark experimental charts
 ```
 
 ---

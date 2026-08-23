@@ -39,4 +39,6 @@ Thumbs.db
 *.lzw
 *.deflate
 *_decompressed.txt
+*_decomp.txt
 tests/outputs/
+
